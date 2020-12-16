@@ -1,90 +1,53 @@
 # -*- coding: utf-8 -*-
 #-------------------------------
-# @Time: 20-12-10  下午3:10
+# @Time: 20-12-16  下午3:42
 # @Author: tina
-# @File: test_calc.py
+# @File: test_calc_allure.py
 #-------------------------------
 import pytest
 import yaml
 from Function_code.Calculator import Calculator
 
-def setup_module():
-    """
-    这是一个module级别的setup，它会在module(xxx.py)里
-    所有test执行之前，被调用一次。
-    注意，它是直接定义为一个module里的函数
-    """
-    print()
-    print("-------------- setup before module --------------")
-
-def teardown_module():
-    """
-    这是一个module级别的teardown，它会在module(xxx.py)里
-    所有test执行之后，被调用一次。
-    注意，它是直接定义为一个module里的函数
-    """
-    print()
-    print("-------------- teardown after module --------------")
 
 class TestCalc:
     """
     生成加减乘除四种方法，以及他们的setup和tesrdown
     """
-    def setup_class(self):
-        print("setup_class: 所有用例开始前执行")
-        self.calc = Calculator()
-        print("测试前先加载Calculator Function")
-        print()
-
-    def teardown_class(self):
-        print()
-        print("teardown_class: 所有用例测试结束")
-
-    def setup_method(self):
-        print("setup_method: 开始计算")
-
-    def teardown_method(self):
-        print("teardown_method:计算结束")
-        print()
-
+    @pytest.mark.run(order=3)
     @pytest.mark.parametrize("a,b,expect",
                              yaml.safe_load(open("./data_add.yaml"))["datas"],
                              ids=yaml.safe_load(open("./data_add.yaml"))["myid"])
-    def test_add(self,a,b,expect):
+    def test_add(self,a,b,expect,myfixture):
         print("正在执行 add 运算：%s + %s = %s" % (a,b,expect))
-        assert expect == self.calc.add(a, b)
+        assert expect == myfixture.add(a, b)
 
+    @pytest.mark.run(order=4)
     @pytest.mark.parametrize("a,b,expect",
                              yaml.safe_load(open("./data_sub.yaml"))["datas"],
                              ids=yaml.safe_load(open("./data_sub.yaml"))["myid"])
-    def test_sub(self,a,b,expect):
+    def test_sub(self,a,b,expect,myfixture):
         print("正在执行 sub 运算：%s - %s = %s" % (a, b, expect))
-        assert expect == self.calc.sub(a, b)
+        assert expect == myfixture.sub(a, b)
 
+    @pytest.mark.run(order=1)
     @pytest.mark.parametrize("a,b,expect",
                              yaml.safe_load(open("./data_mul.yaml"))["datas"],
                              ids = yaml.safe_load(open("./data_mul.yaml"))["myid"])
-    def test_mul(self, a, b, expect):
+    def test_mul(self, a, b, expect, myfixture):
         print("正在执行 mul 运算：%s * %s = %s" % (a, b, expect))
-        assert expect == self.calc.mul(a, b)
+        assert expect == myfixture.mul(a, b)
 
+    @pytest.mark.run(order=2)
     @pytest.mark.parametrize("a,b,expect",
                              yaml.safe_load(open("./data_div.yaml"))["datas"],
                              ids = yaml.safe_load(open("./data_div.yaml"))["myid"])
-    def test_div(self, a, b, expect):
+    def test_div(self, a, b, expect, myfixture):
         print("正在执行 div 运算：%s / %s = %s" % (a, b, expect))
         try:
-            assert expect == self.calc.div(a, b)
+            assert expect == myfixture.div(a, b)
         except ZeroDivisionError as e:
             print(e)
             print("警告：除数不能为0")
 
 if __name__ == '__main__':
-    pytest.main(['test_calc.py', '-sv'])
-
-
-
-
-
-
-
+    pytest.main(['test_calc_allure.py', '-sv'])

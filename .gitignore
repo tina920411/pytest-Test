@@ -1,0 +1,10 @@
+# Created by .ignore support plugin (hsz.mobi)
+test_hogwarts/venv/
+/.idea/
+.pytest_cache/
+my_allure_results/
+report/
+__pycache__/conftest.cpython-37-pytest-6.1.2.pyc
+__pycache__/test_calc_allure.cpython-37-pytest-6.1.2.pyc
+calc_allure_report/
+calc_allure_results/
